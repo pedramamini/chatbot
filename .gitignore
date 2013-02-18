@@ -7,7 +7,7 @@ build
 pip-log.txt
 
 # IDE's
-.sublime*
+*.sublime*
 *swp
 *orig
 
