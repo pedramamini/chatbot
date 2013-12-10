@@ -1,5 +1,5 @@
 """
-Jumpshot HipChat API Interface
+Jumpshot HipChat v2 API Interface
 """
 
 # python modules.
@@ -15,14 +15,15 @@ import simplejson
 ########################################################################################################################
 class api:
     """
-    Interface to read-only HipChat API's.
+    Interface to HipChat v2 API's.
     """
 
     ####################################################################################################################
     def __init__ (self, key):
         self.host    = "api.hipchat.com"
-        self.params  = {"auth_token" : key, "format" : "json"}
-        self.headers = {"Host" : self.host}
+        self.version = "2"
+        self.params  = {} #"auth_token" : key
+        self.headers = {"Host" : self.host, "Authorization" : "Bearer " + key}
         self.data    = {}
 
 
@@ -31,7 +32,7 @@ class api:
         headers.update(self.headers)
         params.update(self.params)
 
-        data = requests.get("https://%s/v1/%s" % (self.host, routine), params=params, headers=headers)
+        data = requests.get("https://%s/v%s/%s" % (self.host, self.version, routine), params=params, headers=headers)
         json = simplejson.loads(data.content)
 
         return json
@@ -43,7 +44,7 @@ class api:
         params.update(self.params)
         data.update(self.data)
 
-        data = requests.post("https://%s/v1/%s" % (self.host, routine), headers=headers, params=params, data=data)
+        data = requests.post("https://%s/v%s/%s" % (self.host, self.version, routine), headers=headers, params=params, data=data)
         json = simplejson.loads(data.content)
 
         return json
@@ -52,7 +53,7 @@ class api:
     ####################################################################################################################
     # straight forward wrappers.
     def rooms_history (self):     return self._get("rooms/history")["rooms"]
-    def rooms_list    (self):     return self._get("rooms/list"   )["rooms"]
+    def rooms_list    (self):     return self._get("rooms"        )["rooms"]
     def users_list    (self):     return self._get("users/list"   )["users"]
 
     def rooms_show    (self, id): return self._get("rooms/show", params={"room_id":id})["room"]
