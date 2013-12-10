@@ -10,6 +10,8 @@ pip-log.txt
 *.sublime*
 *swp
 *orig
+.project
+.pydevproject
 
 # OS artifacts.
 .DS_Store
@@ -17,3 +19,4 @@ Desktop.ini
 Thumbs.db
 
 # Repo specific.
+config.py
