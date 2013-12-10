@@ -5,10 +5,15 @@ about.
 
 Please submit bugs through the GitHub issue tracker.
 
-Setup
------
+-----------------
 
-how to setup.
+## Setup ##
+
+### PIP Requirements ###
+* sleekxmpp
+* simplejson
+* BeautifulSoup
+* pyasn1
 
 Included Handlers
 -----------------

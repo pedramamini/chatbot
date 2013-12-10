@@ -25,6 +25,16 @@ import helpers
 import hipchat
 
 
+# Python versions before 3.0 do not use UTF-8 encoding
+# by default. To ensure that Unicode is handled properly
+# throughout SleekXMPP, we will set the default encoding
+# ourselves to UTF-8.
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+else:
+    raw_input = input
+    
 ########################################################################################################################
 class jumpbot (sleekxmpp.ClientXMPP):
     """
@@ -33,6 +43,7 @@ class jumpbot (sleekxmpp.ClientXMPP):
 
     ####################################################################################################################
     def __init__ (self, username, password):
+    
         sleekxmpp.ClientXMPP.__init__(self, username, password)
 
         # register callbacks for XMPP events.
@@ -44,7 +55,7 @@ class jumpbot (sleekxmpp.ClientXMPP):
         self.help     = {}                                                  # handler documentation data structure.
         self.path     = os.path.dirname(os.path.abspath(__file__))          # absolute path to directory containing bot.
         self.triggers = {"any":[], "command":[], "cron":[], "regex":[]}     # handler trigger mapping data structure.
-        self.api      = hipchat.api(config.HIPCHAT_API_KEY)                 # interface to HipChat API.
+        self.hipchat  = hipchat.api(config.HIPCHAT_API_KEY)                 # interface to HipChat API.
 
         # establish memory connectivity. sets: self.conn, self.memory.
         self._memory_connect()
@@ -276,8 +287,8 @@ class jumpbot (sleekxmpp.ClientXMPP):
         """
 
         # required by XMPP.
-        self.sendPresence()
-        self.getRoster()
+        self.send_presence()
+        self.get_roster()
 
         # for each configured room.
         for room in config.ROOMS:
@@ -285,7 +296,7 @@ class jumpbot (sleekxmpp.ClientXMPP):
 
             # convert room name to HipChat suitable format.
             try:
-                encoded = self.api.room_encode(room)
+                encoded = self.hipchat.room_encode(room)
             except Exception as e:
                 self._err("failed hipchat-ifying room named: %s" % room)
 
@@ -494,7 +505,7 @@ class jumpbot (sleekxmpp.ClientXMPP):
             phrase_or_phrases = [phrase_or_phrases]
 
         # extract and decode room.
-        room = self.api.room_decode(xmpp_message["mucroom"])
+        room = self.hipchat.room_decode(xmpp_message["mucroom"])
 
         # speak each phrase.
         for phrase in phrase_or_phrases:
@@ -505,7 +516,7 @@ class jumpbot (sleekxmpp.ClientXMPP):
 ########################################################################################################################
 if __name__ == "__main__":
     # satisfy sleekxmpp logging
-    logging.basicConfig(level="CRITICAL", format="%(levelname)-8s %(message)s")
+    logging.basicConfig(level="DEBUG", format="%(levelname)-8s %(message)s")
 
     # if the password isn't specified in the config module, read it in now.
     if not config.PASSWORD:
@@ -530,6 +541,6 @@ if __name__ == "__main__":
         officer_pete._exception_handler("connection failure.")
 
     # process cron jobs at the specified interval.
-    while 1:
-        officer_pete._process_cron()
-        time.sleep(config.CRON_INTERVAL)
+    #while 1:
+        #officer_pete._process_cron()
+        #time.sleep(config.CRON_INTERVAL)

@@ -12,6 +12,7 @@ pip-log.txt
 *orig
 .project
 .pydevproject
+.settings
 
 # OS artifacts.
 .DS_Store
