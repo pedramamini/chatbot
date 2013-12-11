@@ -516,7 +516,7 @@ class jumpbot (sleekxmpp.ClientXMPP):
 ########################################################################################################################
 if __name__ == "__main__":
     # satisfy sleekxmpp logging
-    logging.basicConfig(level="DEBUG", format="%(levelname)-8s %(message)s")
+    logging.basicConfig(level="CRITICAL", format="%(levelname)-8s %(message)s")
 
     # if the password isn't specified in the config module, read it in now.
     if not config.PASSWORD:

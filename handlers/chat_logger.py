@@ -6,6 +6,8 @@ import helpers
 
 LOG_CHATS_TO_CONSOLE = True
 
+from pprint import pprint
+
 class handler:
     """
     Chat logging.
@@ -38,15 +40,18 @@ class handler:
         Maintain a message log.
         """
 
-        room_id   = self.bot.api.room_jid2id(room)
-        room_name = self.bot.api.room_decode(room)
-        user_id   = self.bot.api.user_from_xmpp_message(xmpp_message)
+        pprint(room)
+
+        #room_id   = self.bot.hipchat.room_jid2id(room)
+        room_id   = room
+        room_name = self.bot.hipchat.room_decode(room)
+        user_id   = self.bot.hipchat.user_from_xmpp_message(xmpp_message)
         user_name = nick
-        user_nick = self.bot.api.user_nick2at(user_name).lstrip("@")
+        user_nick = self.bot.hipchat.user_nick2at(user_name).lstrip("@")
         stamp     = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         if LOG_CHATS_TO_CONSOLE and nick != self.bot.config.NICKNAME:
-            self.bot._dbg("[%s] %s: %s" % (self.bot.api.room_decode(room), nick, message))
+            self.bot._dbg("[%s] %s: %s" % (self.bot.hipchat.room_decode(room), nick, message))
 
 
         sql    = "INSERT INTO chatlog"

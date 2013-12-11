@@ -21,3 +21,4 @@ Thumbs.db
 
 # Repo specific.
 config.py
+*.memory
