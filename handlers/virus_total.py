@@ -58,7 +58,7 @@ class handler:
 
         URL = "https://www.virustotal.com/api/get_file_report.json"
 
-        if not self.bot.config.VT_API_KEY:
+        if not self.bot.config.VT_API_KEY or self.bot.config.VT_API_KEY == '':
             return "(disapproval) missing config.VT_API_KEY"
 
         # check for invalid characters.
