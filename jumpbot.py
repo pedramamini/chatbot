@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # python modules.
 import os
 import re
@@ -25,16 +27,14 @@ import helpers
 import hipchat
 
 
-# Python versions before 3.0 do not use UTF-8 encoding
-# by default. To ensure that Unicode is handled properly
-# throughout SleekXMPP, we will set the default encoding
-# ourselves to UTF-8.
+# Python versions before 3.0 do not use UTF-8 encoding by default. To ensure that Unicode is handled properly
+# throughout SleekXMPP, we will set the default encoding ourselves to UTF-8.
 if sys.version_info < (3, 0):
     reload(sys)
     sys.setdefaultencoding('utf8')
 else:
     raw_input = input
-    
+
 ########################################################################################################################
 class jumpbot (sleekxmpp.ClientXMPP):
     """
@@ -43,7 +43,7 @@ class jumpbot (sleekxmpp.ClientXMPP):
 
     ####################################################################################################################
     def __init__ (self, username, password):
-    
+
         sleekxmpp.ClientXMPP.__init__(self, username, password)
 
         # register callbacks for XMPP events.
@@ -541,6 +541,6 @@ if __name__ == "__main__":
         officer_pete._exception_handler("connection failure.")
 
     # process cron jobs at the specified interval.
-    #while 1:
-        #officer_pete._process_cron()
-        #time.sleep(config.CRON_INTERVAL)
+    # while 1:
+    #     officer_pete._process_cron()
+    #     time.sleep(config.CRON_INTERVAL)
