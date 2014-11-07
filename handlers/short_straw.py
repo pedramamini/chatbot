@@ -31,7 +31,7 @@ class handler:
 
         # find the active room.
         try:
-            room_id = self.bot.api.room_jid2id(room)
+            room_id = self.bot.hipchat.room_jid2id(room)
         except:
             self.bot._err("api.room_jid2id('%s') failed." % room)
             return
@@ -39,9 +39,9 @@ class handler:
         # make a list of users in the room.
         candidates = []
 
-        for participant in self.bot.api.rooms_show(room_id)["participants"]:
+        for participant in self.bot.hipchat.rooms_show(room_id)["participants"]:
             if participant["user_id"] != self.bot.config.USER_ID:
-                candidates.append(self.bot.api.user_nick2at(participant["name"]))
+                candidates.append(self.bot.hipchat.user_nick2at(participant["name"]))
 
         # randomly choose a candidate.
         return "raise your hand if you drew the short straw (freddie) %s" % (random.choice(candidates))

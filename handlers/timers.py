@@ -167,7 +167,7 @@ class handler:
             return "%shmmm, try again. i need to know how often would you'd like me to remind you." % EMOTICON
 
         # record the reminder.
-        room_id    = self.bot.api.room_jid2id(room)
+        room_id    = self.bot.hipchat.room_jid2id(room)
         now        = datetime.datetime.now()
         expiration = (now + datetime.timedelta(days=days)).strftime("%Y-%m-%d 00:00:00")
         expiration = time.mktime(time.strptime(expiration, "%Y-%m-%d 00:00:00"))
@@ -297,10 +297,10 @@ class handler:
             self.last_reminders[self.current_nick].append(reminder)
 
             message = "%s, you wanted me to remind you %s. i'll remind you again in %d days." % \
-                (self.bot.api.user_nick2at(self.current_nick), message, days)
+                (self.bot.hipchat.user_nick2at(self.current_nick), message, days)
 
             # notify the room.
-            self.bot.api.rooms_message(room_id, message, color="purple", notify=1)
+            self.bot.hipchat.rooms_message(room_id, message, color="purple", notify=1)
 
             # reminder is no longer active.
             return False
@@ -511,7 +511,7 @@ class handler:
 
         # argument parsing and sanitization.
         args   = args.strip()
-        atname = self.bot.api.user_nick2at(nick)
+        atname = self.bot.hipchat.user_nick2at(nick)
 
         # first space-delimited chunk of args is the number of minutes, second is optional description.
         if " " in args:
@@ -526,7 +526,7 @@ class handler:
             return "%stry again please. minutes should be an integer." % EMOTICON
 
         # record the timer.
-        room_id    = self.bot.api.room_jid2id(room)
+        room_id    = self.bot.hipchat.room_jid2id(room)
         expiration = int(time.time() + minutes * 60)
 
         self.timers[nick] = self.timers.get(nick, [])
@@ -546,7 +546,7 @@ class handler:
         """
 
         timesheet    = ""
-        this_room_id = self.bot.api.room_jid2id(room)
+        this_room_id = self.bot.hipchat.room_jid2id(room)
 
         # iterate through each users timers for this specific room.
         for nick, timers in self.timers.iteritems():
@@ -600,7 +600,7 @@ class handler:
         """
 
         # get @mention name.
-        atname = self.bot.api.user_nick2at(nick)
+        atname = self.bot.hipchat.user_nick2at(nick)
 
         # user has no active timers.
         if not self.timers.has_key(nick) or not self.timers[nick]:
@@ -638,7 +638,7 @@ class handler:
         if int(time.time()) > expiration:
 
             # get @mention name.
-            atname = self.bot.api.user_nick2at(self.current_nick)
+            atname = self.bot.hipchat.user_nick2at(self.current_nick)
 
             if message:
                 message = "timer set by %s has expired: %s" % (atname, message)
@@ -646,7 +646,7 @@ class handler:
                 message = "timer set by %s has expired." % atname
 
             # notify the room.
-            self.bot.api.rooms_message(room_id, message, color="purple", notify=1)
+            self.bot.hipchat.rooms_message(room_id, message, color="purple", notify=1)
 
             # timer is no longer active.
             return False
