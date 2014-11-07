@@ -5,6 +5,7 @@
 dist
 build
 pip-log.txt
+venv
 
 # IDE's
 *.sublime*
