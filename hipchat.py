@@ -55,16 +55,8 @@ class api:
     ####################################################################################################################
     # straight forward wrappers.
     def rooms_history (self):     return self._get("rooms/history")["rooms"]
-    
-    def rooms_list    (self):
-        rooms = []
-        response = self._get("room")
-        for room in response["items"]:
-            rooms.append(room["name"])
-        return rooms
-    
-    def users_list    (self):     return self._get("users/list"   )["users"]
-
+    def rooms_list    (self):     return self._get("rooms/list")["rooms"]
+    def users_list    (self):     return self._get("users/list")["users"]
     def rooms_show    (self, id): return self._get("rooms/show", params={"room_id":id})["room"]
     def users_show    (self, id): return self._get("users/show", params={"user_id":id})["user"]
 
