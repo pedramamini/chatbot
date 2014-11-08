@@ -541,6 +541,6 @@ if __name__ == "__main__":
         officer_pete._exception_handler("connection failure.")
 
     # process cron jobs at the specified interval.
-    # while 1:
-    #     officer_pete._process_cron()
-    #     time.sleep(config.CRON_INTERVAL)
+    while 1:
+        officer_pete._process_cron()
+        time.sleep(config.CRON_INTERVAL)
