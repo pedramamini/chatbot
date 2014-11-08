@@ -24,3 +24,4 @@ Thumbs.db
 go*.sh
 local.config.py
 *.memory
+*tickle*
