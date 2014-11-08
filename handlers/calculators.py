@@ -19,8 +19,8 @@ class handler:
         for alias in ["calculator", "=", "calc"]:
             self.bot.register_trigger(self.calculator, "command", alias)
 
-        for alias in ["gcalc"]:
-            self.bot.register_trigger(self.google_calculator, "command", alias)
+        # for alias in ["gcalc"]:
+        #     self.bot.register_trigger(self.google_calculator, "command", alias)
 
         # register help.
         self.bot.register_help("calculator",        self.calculator.__doc__)
@@ -79,56 +79,58 @@ class handler:
 
 
     ####################################################################################################################
-    # def google_calculator (self, xmpp_message, room, nick, expression):
-    #     """
-    #     Help humans calculate. Use 'result', 'res', 'answer', 'ans' or '_' to reference the result of the calculation.
-    #     Results are tracked individually per person, room and calculator type.
+    def google_calculator (self, xmpp_message, room, nick, expression):
+        """
+        Help humans calculate. Use 'result', 'res', 'answer', 'ans' or '_' to reference the result of the calculation.
+        Results are tracked individually per person, room and calculator type.
 
-    #     Usage: .gcalc <expression>
+        @note: This API is not deprecated.
 
-    #     Alias: gc
-    #     """
+        Usage: .gcalc <expression>
 
-    #     URL = "https://www.google.com/ig/calculator?hl=en&q="
+        Alias: gc
+        """
 
-    #     # an expression is required.
-    #     if not expression:
-    #         return
+        URL = "https://www.google.com/ig/calculator?hl=en&q="
 
-    #     # ensure local storage exists for this user.
-    #     if not self.gcalc_answers.has_key(nick):
-    #         self.gcalc_answers[nick] = {}
+        # an expression is required.
+        if not expression:
+            return
 
-    #     # ...and in this specific room.
-    #     if not self.gcalc_answers[nick].has_key(room):
-    #         self.gcalc_answers[nick][room] = 0
+        # ensure local storage exists for this user.
+        if not self.gcalc_answers.has_key(nick):
+            self.gcalc_answers[nick] = {}
 
-    #     # normalize ans -> answer -> _
-    #     expression = expression.replace("answer", "_").replace("ans", "_")
+        # ...and in this specific room.
+        if not self.gcalc_answers[nick].has_key(room):
+            self.gcalc_answers[nick][room] = 0
 
-    #     # splice in the last value.
-    #     if "_" in expression:
-    #         expression = expression.replace("_", str(self.gcalc_answers[nick][room]))
+        # normalize ans -> answer -> _
+        expression = expression.replace("answer", "_").replace("ans", "_")
 
-    #     try:
-    #         data = requests.get(URL + requests.utils.quote(expression)).content
-    #         data = helpers.sanitize(data)
-    #     except:
-    #         return "(facepalm) sorry. I encounted a JSON parsing error."
+        # splice in the last value.
+        if "_" in expression:
+            expression = expression.replace("_", str(self.gcalc_answers[nick][room]))
 
-    #     try:
-    #         # normalize the JavaScript JSON into properly quoted JSON.
-    #         # ex: {lhs: "200 pounds",rhs: "90.718474 kilograms",error: "",icc: false}
-    #         for token in ["lhs", "rhs", "error", "icc"]:
-    #             data = data.replace(token + ":", '"%s":' % token)
+        try:
+            data = requests.get(URL + requests.utils.quote(expression)).content
+            data = helpers.sanitize(data)
+        except:
+            return "(facepalm) sorry. I encounted a JSON parsing error."
 
-    #         data = simplejson.loads(data)
-    #         ans  = data["rhs"]
+        try:
+            # normalize the JavaScript JSON into properly quoted JSON.
+            # ex: {lhs: "200 pounds",rhs: "90.718474 kilograms",error: "",icc: false}
+            for token in ["lhs", "rhs", "error", "icc"]:
+                data = data.replace(token + ":", '"%s":' % token)
 
-    #         if ans:
-    #             self.gcalc_answers[nick][room] = ans
-    #             return "%s" % ans
-    #         else:
-    #             return "(thumbsdown) could not compute."
-    #     except:
-    #         return "(facepalm) oops. I encountered an error."
+            data = simplejson.loads(data)
+            ans  = data["rhs"]
+
+            if ans:
+                self.gcalc_answers[nick][room] = ans
+                return "%s" % ans
+            else:
+                return "(thumbsdown) could not compute."
+        except:
+            return "(facepalm) oops. I encountered an error."
