@@ -138,6 +138,7 @@ class jumpbot (sleekxmpp.ClientXMPP):
                     except Exception as e:
                         self._exception_handler("unable to load handler: %s" % handler, e, fatal=True)
 
+        # raise a flag to denote that handlers have been loaded.
         self.flags.append("HANDLERS_LOADED")
         self._dbg("all handlers loaded.")
 
@@ -293,6 +294,10 @@ class jumpbot (sleekxmpp.ClientXMPP):
         Called upon successful connection to HipChat server. Joins configured rooms then calls load handler routine.
         """
 
+        # ensure this routine isn't run twice.
+        if "XMPP_STARTUP" in self.flags:
+            return
+
         # required by XMPP.
         self.send_presence()
         self.get_roster()
@@ -315,6 +320,9 @@ class jumpbot (sleekxmpp.ClientXMPP):
 
         # now that we're connected to the server, we can process handlers.
         self._load_handlers()
+
+        # add a flag to denote that we have completed initial startup.
+        self.flags.append("XMPP_STARTUP")
 
 
     ####################################################################################################################
