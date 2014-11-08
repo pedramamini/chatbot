@@ -79,56 +79,56 @@ class handler:
 
 
     ####################################################################################################################
-    def google_calculator (self, xmpp_message, room, nick, expression):
-        """
-        Help humans calculate. Use 'result', 'res', 'answer', 'ans' or '_' to reference the result of the calculation.
-        Results are tracked individually per person, room and calculator type.
+    # def google_calculator (self, xmpp_message, room, nick, expression):
+    #     """
+    #     Help humans calculate. Use 'result', 'res', 'answer', 'ans' or '_' to reference the result of the calculation.
+    #     Results are tracked individually per person, room and calculator type.
 
-        Usage: .gcalc <expression>
+    #     Usage: .gcalc <expression>
 
-        Alias: gc
-        """
+    #     Alias: gc
+    #     """
 
-        URL = "https://www.google.com/ig/calculator?hl=en&q="
+    #     URL = "https://www.google.com/ig/calculator?hl=en&q="
 
-        # an expression is required.
-        if not expression:
-            return
+    #     # an expression is required.
+    #     if not expression:
+    #         return
 
-        # ensure local storage exists for this user.
-        if not self.gcalc_answers.has_key(nick):
-            self.gcalc_answers[nick] = {}
+    #     # ensure local storage exists for this user.
+    #     if not self.gcalc_answers.has_key(nick):
+    #         self.gcalc_answers[nick] = {}
 
-        # ...and in this specific room.
-        if not self.gcalc_answers[nick].has_key(room):
-            self.gcalc_answers[nick][room] = 0
+    #     # ...and in this specific room.
+    #     if not self.gcalc_answers[nick].has_key(room):
+    #         self.gcalc_answers[nick][room] = 0
 
-        # normalize ans -> answer -> _
-        expression = expression.replace("answer", "_").replace("ans", "_")
+    #     # normalize ans -> answer -> _
+    #     expression = expression.replace("answer", "_").replace("ans", "_")
 
-        # splice in the last value.
-        if "_" in expression:
-            expression = expression.replace("_", str(self.gcalc_answers[nick][room]))
+    #     # splice in the last value.
+    #     if "_" in expression:
+    #         expression = expression.replace("_", str(self.gcalc_answers[nick][room]))
 
-        try:
-            data = requests.get(URL + requests.utils.quote(expression)).content
-            data = helpers.sanitize(data)
-        except:
-            return "(facepalm) sorry. I encounted a JSON parsing error."
+    #     try:
+    #         data = requests.get(URL + requests.utils.quote(expression)).content
+    #         data = helpers.sanitize(data)
+    #     except:
+    #         return "(facepalm) sorry. I encounted a JSON parsing error."
 
-        try:
-            # normalize the JavaScript JSON into properly quoted JSON.
-            # ex: {lhs: "200 pounds",rhs: "90.718474 kilograms",error: "",icc: false}
-            for token in ["lhs", "rhs", "error", "icc"]:
-                data = data.replace(token + ":", '"%s":' % token)
+    #     try:
+    #         # normalize the JavaScript JSON into properly quoted JSON.
+    #         # ex: {lhs: "200 pounds",rhs: "90.718474 kilograms",error: "",icc: false}
+    #         for token in ["lhs", "rhs", "error", "icc"]:
+    #             data = data.replace(token + ":", '"%s":' % token)
 
-            data = simplejson.loads(data)
-            ans  = data["rhs"]
+    #         data = simplejson.loads(data)
+    #         ans  = data["rhs"]
 
-            if ans:
-                self.gcalc_answers[nick][room] = ans
-                return "%s" % ans
-            else:
-                return "(thumbsdown) could not compute."
-        except:
-            return "(facepalm) oops. I encountered an error."
+    #         if ans:
+    #             self.gcalc_answers[nick][room] = ans
+    #             return "%s" % ans
+    #         else:
+    #             return "(thumbsdown) could not compute."
+    #     except:
+    #         return "(facepalm) oops. I encountered an error."
