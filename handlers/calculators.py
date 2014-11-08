@@ -81,10 +81,9 @@ class handler:
     ####################################################################################################################
     def google_calculator (self, xmpp_message, room, nick, expression):
         """
+        (DEPRECATED! Google API has vanished.)
         Help humans calculate. Use 'result', 'res', 'answer', 'ans' or '_' to reference the result of the calculation.
         Results are tracked individually per person, room and calculator type.
-
-        @note: This API is not deprecated.
 
         Usage: .gcalc <expression>
 
