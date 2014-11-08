@@ -5,7 +5,6 @@ import os
 import re
 import sys
 import time
-import types
 import pickle
 import sqlite3
 import logging
@@ -13,9 +12,7 @@ import getpass
 import traceback
 
 # external dependencies.
-import requests
 import sleekxmpp
-import simplejson
 
 # import options from config.py.
 import config
@@ -67,13 +64,13 @@ class jumpbot (sleekxmpp.ClientXMPP):
     def _dbg (self, message):
         try:
             sys.stdout.write("[--] %s\n" % message)
-        except Exception as e:
+        except Exception:
             pass
 
     def _err (self, message):
         try:
             sys.stderr.write("[!!] %s\n" % message)
-        except Exception as e:
+        except Exception:
             pass
 
 
@@ -298,7 +295,7 @@ class jumpbot (sleekxmpp.ClientXMPP):
         self.get_roster()
 
         # if this is the first time we are spinning up...
-        if "XMPP_STARTUP" in self.flags:
+        if "XMPP_STARTUP" not in self.flags:
 
             # for each configured room.
             for room in config.ROOMS:
