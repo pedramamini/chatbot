@@ -23,9 +23,9 @@ class api:
     ####################################################################################################################
     def __init__ (self, key):
         self.host    = "api.hipchat.com"
-        self.version = "2"
-        self.params  = {} #"auth_token" : key
-        self.headers = {"Host" : self.host, "Authorization" : "Bearer " + key}
+        self.version = "1"
+        self.params  = {"auth_token" : key}
+        self.headers = {"Host" : self.host}
         self.data    = {}
 
 
