@@ -1,4 +1,7 @@
 BeautifulSoup==3.2.1
+gnureadline==6.3.3
+ipython==2.3.0
+psycopg2==2.5.4
 pyasn1==0.1.7
 requests==2.4.3
 simplejson==3.6.5
