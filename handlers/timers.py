@@ -459,9 +459,9 @@ class handler:
                 report += "%d hours " % hours
 
             if days or hours or minutes:
-                report += "%d minutes " % minutes
+                report += "%d minutes and " % minutes
 
-            report += " and %02.02f seconds" % (seconds + milliseconds)
+            report += "%02.02f seconds" % (seconds + milliseconds)
 
             return report
 
@@ -488,14 +488,14 @@ class handler:
             # commit the data structure to memory.
             self.bot.memory_remember("stopwatches", self.stopwatches)
 
-            return "%sstopped! time: %s" (EMOTICON, format_stopwatch(self.elapsed_time(start)))
+            return "%sstopped! time: %s" % (EMOTICON, format_stopwatch(self.elapsed_time(start)))
 
         # check time elapsed (also matches "naked" command: .stopwatch),
         elif not message or "time" in message or "elapsed" in message:
             if not self.stopwatches.has_key(nick):
-                return "%syou don't have a running stopwatch." % emoticon
+                return "%syou don't have a running stopwatch." % EMOTICON
 
-            return "%selapsed time: " % (EMOTICON, format_stopwatch(self.elapsed_time(self.stopwatches[nick])))
+            return "%selapsed time: %s" % (EMOTICON, format_stopwatch(self.elapsed_time(self.stopwatches[nick])))
 
         # invalid.
         else:
