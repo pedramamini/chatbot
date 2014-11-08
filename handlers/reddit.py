@@ -42,8 +42,8 @@ class handler:
             return "(reddit) alphanumeric characters only for subreddit wise guy."
 
         try:
-            data = requests.get(URL % subreddit).content
-            data = simplejson.loads(data)["data"]
+            data = requests.get(URL % subreddit, headers={"User-Agent" : "chatty-chat-bot"}).content
+            data = simplejson.loads(data)
         except:
             return "(reddit) no such subreddit."
 
