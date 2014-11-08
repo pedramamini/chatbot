@@ -37,8 +37,8 @@ class handler:
         if not term:
             return
 
-        URL  = "http://www.urbandictionary.com/iphone/search/define?term=%s"
-        HDRS = { "Host" : "www.urbandictionary.com" }
+        URL  = "http://api.urbandictionary.com/v0/define?term=%s"
+        HDRS = { "Host" : "api.urbandictionary.com" }
 
         try:
             data = requests.get(URL % requests.utils.quote(term), headers=HDRS).content
