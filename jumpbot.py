@@ -26,7 +26,6 @@ import helpers
 # import our HipChat API.
 import hipchat
 
-
 # Python versions before 3.0 do not use UTF-8 encoding by default. To ensure that Unicode is handled properly
 # throughout SleekXMPP, we will set the default encoding ourselves to UTF-8.
 if sys.version_info < (3, 0):
