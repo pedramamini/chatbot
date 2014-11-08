@@ -56,6 +56,7 @@ class jumpbot (sleekxmpp.ClientXMPP):
         self.path     = os.path.dirname(os.path.abspath(__file__))          # absolute path to directory containing bot.
         self.triggers = {"any":[], "command":[], "cron":[], "regex":[]}     # handler trigger mapping data structure.
         self.hipchat  = hipchat.api(config.HIPCHAT_API_KEY)                 # interface to HipChat API.
+        self.flags    = []                                                  # internal flag list for maintaining state.
 
         # establish memory connectivity. sets: self.conn, self.memory.
         self._memory_connect()
@@ -110,6 +111,11 @@ class jumpbot (sleekxmpp.ClientXMPP):
         Dynamically load all available handlers in self.path/"handlers".
         """
 
+        # ensure this routine isn't run twice.
+        if "HANDLERS_LOADED" in self.flags:
+            self._dbg("handlers already loaded.")
+            return
+
         # resolve path to handlers.
         path_handlers = self.path + os.sep + "handlers"
 
@@ -132,6 +138,7 @@ class jumpbot (sleekxmpp.ClientXMPP):
                     except Exception as e:
                         self._exception_handler("unable to load handler: %s" % handler, e, fatal=True)
 
+        self.flags.append("HANDLERS_LOADED")
         self._dbg("all handlers loaded.")
 
 
