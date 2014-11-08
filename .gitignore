@@ -21,5 +21,6 @@ Desktop.ini
 Thumbs.db
 
 # Repo specific.
+go.sh
 local.config.py
 *.memory
