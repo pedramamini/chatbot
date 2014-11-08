@@ -43,7 +43,7 @@ class handler:
 
         try:
             data = requests.get(URL % subreddit, headers={"User-Agent" : "chatty-chat-bot"}).content
-            data = simplejson.loads(data)
+            data = simplejson.loads(data)["data"]
         except:
             return "(reddit) no such subreddit."
 
