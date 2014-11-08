@@ -294,32 +294,31 @@ class jumpbot (sleekxmpp.ClientXMPP):
         Called upon successful connection to HipChat server. Joins configured rooms then calls load handler routine.
         """
 
-        # ensure this routine isn't run twice.
-        if "XMPP_STARTUP" in self.flags:
-            return
-
         # required by XMPP.
         self.send_presence()
         self.get_roster()
 
-        # for each configured room.
-        for room in config.ROOMS:
-            self._dbg("joining room: %s" % room)
+        # if this is the first time we are spinning up...
+        if "XMPP_STARTUP" in self.flags:
 
-            # convert room name to HipChat suitable format.
-            try:
-                encoded = self.hipchat.room_encode(room)
-            except Exception as e:
-                self._err("failed hipchat-ifying room named: %s" % room)
+            # for each configured room.
+            for room in config.ROOMS:
+                self._dbg("joining room: %s" % room)
 
-            try:
-                # enter the room via MUC plugin.
-                self.plugin["xep_0045"].joinMUC(encoded, config.NICKNAME)
-            except:
-                self._err("failed xmpp joining %s (%s)" % (room, encoded))
+                # convert room name to HipChat suitable format.
+                try:
+                    encoded = self.hipchat.room_encode(room)
+                except Exception:
+                    self._err("failed hipchat-ifying room named: %s" % room)
 
-        # now that we're connected to the server, we can process handlers.
-        self._load_handlers()
+                try:
+                    # enter the room via MUC plugin.
+                    self.plugin["xep_0045"].joinMUC(encoded, config.NICKNAME)
+                except:
+                    self._err("failed xmpp joining %s (%s)" % (room, encoded))
+
+            # now that we're connected to the server, we can process handlers.
+            self._load_handlers()
 
         # add a flag to denote that we have completed initial startup.
         self.flags.append("XMPP_STARTUP")
