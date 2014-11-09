@@ -44,4 +44,7 @@ class handler:
                 candidates.append(self.bot.hipchat.user_nick2at(participant["name"]))
 
         # randomly choose a candidate.
-        return "raise your hand if you drew the short straw (freddie) %s" % (random.choice(candidates))
+        the_chosen  = "raise your hand if you drew the short straw (freddie) %s (from %d candidates)"
+        the_chosen %= random.choice(candidates), len(candidates)
+
+        return the_chosen
