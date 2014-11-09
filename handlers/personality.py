@@ -2,13 +2,8 @@ import random
 import requests
 import simplejson
 
-LS_OUT = """
-/code $ wrong window %s! but here's what I see in my directory:
-Procfile            config.py           go.sh               handlers            helpers.pyc
-hipchat.pyc         local.config.py     pg-tickle.py        runtime.txt         venv
-README.md           config.pyc          goped.sh            helpers.py          hipchat.py
-jumpbot.py          officer_pete.memory requirements.txt    sample.config.py
-""".strip()
+# bot helpers.
+import helpers
 
 
 ########################################################################################################################
@@ -31,4 +26,4 @@ class handler:
         Super basic retort.
         """
 
-        return LS_OUT % nick
+        return "/code $ wrong window %s! but here you go:\n%s" % (nick, helpers.launch_command("ls -l ")[0])
