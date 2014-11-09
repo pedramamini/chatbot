@@ -3,7 +3,7 @@ import requests
 import simplejson
 
 LS_OUT = """
-$ wrong window %s! but here's what I see in my directory:
+/code $ wrong window %s! but here's what I see in my directory:
 Procfile            config.py           go.sh               handlers            helpers.pyc
 hipchat.pyc         local.config.py     pg-tickle.py        runtime.txt         venv
 README.md           config.pyc          goped.sh            helpers.py          hipchat.py
