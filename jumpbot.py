@@ -294,30 +294,30 @@ class jumpbot (sleekxmpp.ClientXMPP):
         self.send_presence()
         self.get_roster()
 
-        # if this is the first time we are spinning up...
-        if "XMPP_STARTUP" not in self.flags:
+        # for each configured room.
+        for room in config.ROOMS:
 
-            # for each configured room.
-            for room in config.ROOMS:
+            # if this is the first time we are spinning up... enable logging of rooms we enter, otherwise, don't.
+            if "XMPP_STARTUP" not in self.flags:
                 self._dbg("joining room: %s" % room)
 
-                # convert room name to HipChat suitable format.
-                try:
-                    encoded = self.hipchat.room_encode(room)
-                except Exception:
-                    self._err("failed hipchat-ifying room named: %s" % room)
+                # add a flag to denote that we have completed initial startup.
+                self.flags.append("XMPP_STARTUP")
 
-                try:
-                    # enter the room via MUC plugin.
-                    self.plugin["xep_0045"].joinMUC(encoded, config.NICKNAME)
-                except:
-                    self._err("failed xmpp joining %s (%s)" % (room, encoded))
+            # convert room name to HipChat suitable format.
+            try:
+                encoded = self.hipchat.room_encode(room)
+            except Exception:
+                self._err("failed hipchat-ifying room named: %s" % room)
 
-            # now that we're connected to the server, we can process handlers.
-            self._load_handlers()
+            try:
+                # enter the room via MUC plugin.
+                self.plugin["xep_0045"].joinMUC(encoded, config.NICKNAME)
+            except:
+                self._err("failed xmpp joining %s (%s)" % (room, encoded))
 
-        # add a flag to denote that we have completed initial startup.
-        self.flags.append("XMPP_STARTUP")
+        # now that we're connected to the server, we can process handlers.
+        self._load_handlers()
 
 
     ####################################################################################################################
