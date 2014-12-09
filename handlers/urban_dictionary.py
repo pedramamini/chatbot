@@ -47,6 +47,8 @@ class handler:
             return "(facepalm) sorry. I encounted an error."
 
         # pick a random definision.
-        ud = random.choice(data["list"])
-
-        return [ud["permalink"], "%s\nExample: %s" % (ud["definition"], ud["example"])]
+        try:
+            ud = random.choice(data["list"])
+            return [ud["permalink"], "%s\nExample: %s" % (ud["definition"], ud["example"])]
+        except:
+            return "No definition found for '%s'" % term
